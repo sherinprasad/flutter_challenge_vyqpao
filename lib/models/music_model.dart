@@ -83,6 +83,7 @@ class Entry {
   ImArtist imArtist;
   Category category;
   ImReleaseDate imReleaseDate;
+  bool favorite;
 
   Entry({
     this.imName,
@@ -97,6 +98,7 @@ class Entry {
     this.imArtist,
     this.category,
     this.imReleaseDate,
+    this.favorite
   });
 
   factory Entry.fromJson(Map<String, dynamic> json) => Entry(
@@ -113,6 +115,7 @@ class Entry {
         imArtist: ImArtist.fromJson(json["im:artist"]),
         category: Category.fromJson(json["category"]),
         imReleaseDate: ImReleaseDate.fromJson(json["im:releaseDate"]),
+    favorite: false,
       );
 }
 

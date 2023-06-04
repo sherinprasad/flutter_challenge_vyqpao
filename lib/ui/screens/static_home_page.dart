@@ -24,7 +24,7 @@ class StaticHomePage extends StatelessWidget {
                       padding:
                       EdgeInsetsDirectional.only(top: SizeConfig.padding24),
                       child: ListView.builder(
-                          itemCount: 3,
+                          itemCount: 6,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: EdgeInsetsDirectional.only(
@@ -33,7 +33,7 @@ class StaticHomePage extends StatelessWidget {
                                   bottom: SizeConfig.padding8),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Color(0xFFf3f3f3),
+                                  color: Colors.grey[800],
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Column(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_challenge_vyqpao/ui/screens/favorites.dart';
 import 'package:flutter_challenge_vyqpao/ui/screens/static_home_page.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../bloc/home_bloc.dart';
@@ -17,8 +18,9 @@ class _HomePageState extends State<HomePage> {
   final searchController = TextEditingController();
   AppColors appColors;
   HomeBloc homeBloc;
-  Feed newList;
-  Feed responseDataList;
+  List newList = [];
+  List responseDataList = [];
+  List favoriteList = [];
   bool showMessage = false;
 
   @override
@@ -77,10 +79,7 @@ class _HomePageState extends State<HomePage> {
                       highlightColor: Colors.grey[300],
                       child: StaticHomePage());
                 }
-                responseDataList = snapshot.data[0].feed;
-                if (newList == null && searchController.text.isEmpty) {
-                  newList = responseDataList;
-                }
+                responseDataList = snapshot.data[0].feed.entry;
 
                 return responseDataList == null
                     ? Container(
@@ -130,88 +129,138 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Container(
                                 width: MediaQuery.of(context).size.width,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(color: Color(0xFFe6e6e6)),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.only(
-                                    start: SizeConfig.padding2,
-                                  ),
-                                  child: Center(
-                                    child: TextField(
-                                      controller: searchController,
-                                      keyboardType: TextInputType.text,
-                                      cursorColor: appColors.powderBlue,
-                                      autofocus: false,
-                                      textCapitalization:
-                                          TextCapitalization.sentences,
-                                      style: TextStyle(
-                                          fontSize: SizeConfig.font15,
-                                          color: appColors.darkGrey),
-                                      //  onChanged: (searchText) {},
-                                      onChanged: (searchText) {
-                                        print(
-                                            'search is ${searchController.text}');
-                                        setState(() {
-                                          newList.entry = responseDataList.entry
-                                              .where((u) => (u.imName.label
-                                                      .toUpperCase()
-                                                      .contains(searchText
-                                                          .toUpperCase()) ||
-                                                  u.imArtist.label
-                                                      .toUpperCase()
-                                                      .contains(searchText
-                                                          .toUpperCase())))
-                                              .toList();
-                                          print('newList is $newList');
-                                          searchText.isNotEmpty &&
-                                                  newList == null
-                                              ? setState(() {
-                                                  showMessage = true;
-                                                  print("show is $showMessage");
-                                                })
-                                              : showMessage = false;
-                                          print(searchController.text.isEmpty);
-                                        });
-                                      },
-                                      decoration: InputDecoration(
-                                        contentPadding:
-                                            const EdgeInsets.only(top: 12),
-                                        isDense: true,
-                                        hintText: 'Search',
-                                        hintStyle: TextStyle(
-                                          fontSize: SizeConfig.font15,
-                                          color: appColors.lightGreyBlue,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        // width: MediaQuery.of(context).size.width,
+                                        height: 48,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                              color: Color(0xFFe6e6e6)),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
-                                        prefixIcon: IconButton(
-                                          icon: Image.asset(
-                                              "assets/png/ic_search.png"),
-                                          onPressed: () {},
+                                        child: Padding(
+                                          padding: EdgeInsetsDirectional.only(
+                                            start: SizeConfig.padding2,
+                                          ),
+                                          child: Center(
+                                            child: TextField(
+                                              controller: searchController,
+                                              keyboardType: TextInputType.text,
+                                              cursorColor: appColors.powderBlue,
+                                              autofocus: false,
+                                              textCapitalization:
+                                                  TextCapitalization.sentences,
+                                              style: TextStyle(
+                                                  fontSize: SizeConfig.font15,
+                                                  color: appColors.darkGrey),
+                                              //  onChanged: (searchText) {},
+                                              onChanged: (searchText) {
+                                                setState(() {
+                                                  newList = responseDataList
+                                                      .where((u) => (u
+                                                              .imName.label
+                                                              .toUpperCase()
+                                                              .contains(searchText
+                                                                  .toUpperCase()) ||
+                                                          u.imArtist.label
+                                                              .toUpperCase()
+                                                              .contains(searchText
+                                                                  .toUpperCase())))
+                                                      .toList();
+
+                                                  searchText.isNotEmpty &&
+                                                          newList.isEmpty
+                                                      ? setState(() {
+                                                          showMessage = true;
+                                                        })
+                                                      : showMessage = false;
+                                                });
+                                              },
+                                              decoration: InputDecoration(
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        top: 12),
+                                                isDense: true,
+                                                hintText: 'Search',
+                                                hintStyle: TextStyle(
+                                                  fontSize: SizeConfig.font15,
+                                                  color:
+                                                      appColors.lightGreyBlue,
+                                                ),
+                                                prefixIcon: IconButton(
+                                                  icon: Image.asset(
+                                                      "assets/png/ic_search.png"),
+                                                  onPressed: () {},
+                                                ),
+                                                suffixIcon: IconButton(
+                                                  icon: Image.asset(
+                                                      "assets/png/button_clear.png"),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      searchController.clear();
+                                                      newList = [];
+                                                      showMessage = false;
+                                                      FocusScope.of(context).unfocus();
+                                                    });
+                                                  },
+                                                ),
+                                                focusedBorder: InputBorder.none,
+                                                enabledBorder: InputBorder.none,
+                                                errorBorder: InputBorder.none,
+                                                disabledBorder:
+                                                    InputBorder.none,
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                        suffixIcon: IconButton(
-                                          icon: Image.asset(
-                                              "assets/png/button_clear.png"),
-                                          onPressed: () {
-                                            setState(() {
-                                              searchController.clear();
-                                              newList = responseDataList;
-                                            });
-                                          },
-                                        ),
-                                        focusedBorder: InputBorder.none,
-                                        enabledBorder: InputBorder.none,
-                                        errorBorder: InputBorder.none,
-                                        disabledBorder: InputBorder.none,
                                       ),
                                     ),
-                                  ),
+                                    SizedBox(width: 30),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Favorites(
+                                                    newList: favoriteList,
+                                                  )),
+                                        );
+                                      },
+                                      child: Container(
+                                        //width:SizeConfig.padding100,
+                                        height: 48,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFF3ebeb7),
+                                          border: Border.all(
+                                              color: Color(0xFFe6e6e6)),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                left: SizeConfig.padding8,
+                                                right: SizeConfig.padding8),
+                                            child: Text(
+                                              "Favorites",
+                                              style: TextStyle(
+                                                fontSize: SizeConfig.font15,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               // SizedBox(height: 28),
-                              showMessage == true && newList != null
+                              showMessage == true
                                   ? Container(
                                       height: SizeConfig.screenHeight - 400,
                                       child: Center(
@@ -271,60 +320,7 @@ class _HomePageState extends State<HomePage> {
                                                 color: Colors.white),
                                           ),
                                         ),
-                                        ListView.builder(
-                                            padding: EdgeInsetsDirectional.zero,
-                                            physics: ClampingScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount: newList.entry.length,
-                                            itemBuilder: (context, index) {
-                                              return Column(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.fromLTRB(
-                                                            SizeConfig
-                                                                .padding16,
-                                                            SizeConfig
-                                                                .padding16,
-                                                            SizeConfig
-                                                                .padding16,
-                                                            SizeConfig
-                                                                .padding12),
-                                                    // 16, 19, 19, 19),
-                                                    child: InkWell(
-                                                      onTap: () {},
-                                                      child: MusicCard(
-                                                        name: newList
-                                                            .entry[index]
-                                                            .imName
-                                                            .label
-                                                            .toString(),
-                                                        year: newList
-                                                            .entry[index]
-                                                            .imReleaseDate
-                                                            .label
-                                                            .toString(),
-                                                        artist: newList
-                                                            .entry[index]
-                                                            .imArtist
-                                                            .label
-                                                            .toString(),
-                                                        image: newList
-                                                            .entry[index]
-                                                            .imImage[2]
-                                                            .label
-                                                            .toString(),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Divider(
-                                                    thickness: 1,
-                                                    color: Colors.grey,
-                                                    height: 1,
-                                                  ),
-                                                ],
-                                              );
-                                            }),
+                                        newMethod(responseDataList),
                                       ],
                                     ),
                             ],
@@ -335,5 +331,55 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Widget newMethod(List responseDataList) {
+    if (newList.isEmpty && searchController.text.isEmpty) {
+      newList = responseDataList;
+    }
+    return ListView.builder(
+        padding: EdgeInsetsDirectional.zero,
+        physics: ClampingScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: newList.length,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    SizeConfig.padding16,
+                    SizeConfig.padding16,
+                    SizeConfig.padding16,
+                    SizeConfig.padding12),
+                // 16, 19, 19, 19),
+                child: InkWell(
+                  onTap: () {
+                    newList[index].favorite == false
+                        ? setState(() {
+                            newList[index].favorite = true;
+                            favoriteList.add(newList[index]);
+                          })
+                        : setState(() {
+                            newList[index].favorite = false;
+                            favoriteList.remove(newList[index]);
+                          });
+                  },
+                  child: MusicCard(
+                    name: newList[index].imName.label.toString(),
+                    year: newList[index].imReleaseDate.label.toString(),
+                    artist: newList[index].imArtist.label.toString(),
+                    image: newList[index].imImage[2].label.toString(),
+                    favorite: newList[index].favorite,
+                  ),
+                ),
+              ),
+              Divider(
+                thickness: 1,
+                color: Colors.grey,
+                height: 1,
+              ),
+            ],
+          );
+        });
   }
 }

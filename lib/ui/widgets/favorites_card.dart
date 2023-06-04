@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../constants/size_config.dart';
 
-class MusicCard extends StatelessWidget {
-  MusicCard({this.image, this.name, this.year, this.artist, this.onTap, this.favorite});
+class FavoritesCard extends StatelessWidget {
+  FavoritesCard({this.image, this.name, this.year, this.artist, this.onTap, this.favorite});
   final String image;
   final String name;
   final String year;
@@ -68,20 +68,7 @@ class MusicCard extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 30),
-          Padding(
-            padding: EdgeInsetsDirectional.only(bottom: SizeConfig.padding20),
-            child: Container(
-              height: 20,
-              width: 20,
-              child: InkWell(
-                onTap: onTap,
-                child: favorite == true
-                    ? Image.asset('assets/png/button_rating_active.png')
-                    : Image.asset('assets/png/button_rating_def.png'),
-              ),
-            ),
-          ),
+
         ],
       ),
     );
