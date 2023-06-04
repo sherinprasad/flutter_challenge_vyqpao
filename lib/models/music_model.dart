@@ -179,31 +179,31 @@ class IdAttributes {
 
 class ImArtist {
   String label;
-  ImArtistAttributes attributes;
+ // ImArtistAttributes attributes;
 
   ImArtist({
     this.label,
-    this.attributes,
+    //this.attributes,
   });
 
   factory ImArtist.fromJson(Map<String, dynamic> json) => ImArtist(
         label: json["label"],
-        attributes: ImArtistAttributes.fromJson(json["attributes"]),
+       // attributes: ImArtistAttributes.fromJson(json["attributes"]),
       );
 }
 
-class ImArtistAttributes {
-  String href;
-
-  ImArtistAttributes({
-    this.href,
-  });
-
-  factory ImArtistAttributes.fromJson(Map<String, dynamic> json) =>
-      ImArtistAttributes(
-        href: json["href"],
-      );
-}
+// class ImArtistAttributes {
+//   String href;
+//
+//   ImArtistAttributes({
+//     this.href,
+//   });
+//
+//   factory ImArtistAttributes.fromJson(Map<String, dynamic> json) =>
+//       ImArtistAttributes(
+//         href: json["href"],
+//       );
+// }
 
 class EntryImContentType {
   ImContentTypeImContentType imContentType;

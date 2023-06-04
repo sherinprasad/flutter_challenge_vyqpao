@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class AppColors{
+class AppColors {
   final Color strongPink = HexColor.fromHex('#e52688');
   final Color greenyBlue = HexColor.fromHex("#37c1f7");
   final Color iceBlue = HexColor.fromHex("#f1f2f3");
@@ -53,11 +53,9 @@ class AppColors{
   final Color lightPurpleColor = HexColor.fromHex("#816AC8");
   final Color rejectedRedColor = HexColor.fromHex("#F13F3F");
   final Color rejectedRed20Color = HexColor.fromHex("#FFF13F3F");
-
-
-
 }
-class HexColor{
+
+class HexColor {
   static Color fromHex(String hexString) {
     final buffer = StringBuffer();
     if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
