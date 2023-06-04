@@ -19,9 +19,10 @@ class _HomePageState extends State<HomePage> {
   final searchController = TextEditingController();
   AppColors appColors;
   HomeBloc homeBloc;
-  List newList = [];
+  Feed newList;
   Feed responseDataList;
   bool showMessage = false;
+  // bool isFavorite = false;
 
   @override
   void initState() {
@@ -81,6 +82,9 @@ class _HomePageState extends State<HomePage> {
                       child: StaticHomePage());
                 }
                 responseDataList = snapshot.data[0].feed;
+                if (newList == null && searchController.text.isEmpty) {
+                  newList = responseDataList;
+                }
 
                 return responseDataList == null
                     ? Container(
@@ -120,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       )
                     : SingleChildScrollView(
-                      child: Padding(
+                        child: Padding(
                           padding: EdgeInsetsDirectional.only(
                               top: SizeConfig.padding16,
                               start: SizeConfig.padding16,
@@ -142,6 +146,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   child: Center(
                                     child: TextField(
+                                      controller: searchController,
                                       keyboardType: TextInputType.text,
                                       cursorColor: appColors.powderBlue,
                                       autofocus: false,
@@ -155,15 +160,19 @@ class _HomePageState extends State<HomePage> {
                                         print(
                                             'search is ${searchController.text}');
                                         setState(() {
-                                          newList = responseDataList.entry
+                                          newList.entry = responseDataList.entry
                                               .where((u) => (u.imName.label
-                                                  .toUpperCase()
-                                                  .contains(
-                                                      searchText.toUpperCase())))
+                                                      .toUpperCase()
+                                                      .contains(searchText
+                                                          .toUpperCase()) ||
+                                                  u.imArtist.label
+                                                      .toUpperCase()
+                                                      .contains(searchText
+                                                          .toUpperCase())))
                                               .toList();
                                           print('newList is $newList');
                                           searchText.isNotEmpty &&
-                                                  newList.length == 0
+                                                  newList == null
                                               ? setState(() {
                                                   showMessage = true;
                                                   print("show is $showMessage");
@@ -181,21 +190,21 @@ class _HomePageState extends State<HomePage> {
                                           fontSize: SizeConfig.font15,
                                           color: appColors.lightGreyBlue,
                                         ),
-                                        prefixIcon: searchController.text.isEmpty
-                                            ? IconButton(
-                                                icon: Image.asset(
-                                                    "assets/png/ic_search.png"),
-                                                onPressed: () {},
-                                              )
-                                            : IconButton(
-                                                icon: Image.asset(
-                                                    "assets/png/button_close.png"),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    searchController.clear();
-                                                  });
-                                                },
-                                              ),
+                                        prefixIcon: IconButton(
+                                          icon: Image.asset(
+                                              "assets/png/ic_search.png"),
+                                          onPressed: () {},
+                                        ),
+                                        suffixIcon: IconButton(
+                                          icon: Image.asset(
+                                              "assets/png/button_clear.png"),
+                                          onPressed: () {
+                                            setState(() {
+                                              searchController.clear();
+                                              newList = responseDataList;
+                                            });
+                                          },
+                                        ),
                                         focusedBorder: InputBorder.none,
                                         enabledBorder: InputBorder.none,
                                         errorBorder: InputBorder.none,
@@ -206,7 +215,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               // SizedBox(height: 28),
-                              showMessage == true
+                              showMessage == true &&
+                                  newList != null
                                   ? Container(
                                       height: SizeConfig.screenHeight - 400,
                                       child: Center(
@@ -244,7 +254,7 @@ class _HomePageState extends State<HomePage> {
                                                 style: TextStyle(
                                                     fontSize: SizeConfig.font17,
                                                     fontWeight: FontWeight.w400,
-                                                    color: Color(0xFF0f0f10)),
+                                                    color: Colors.white),
                                               ),
                                             ],
                                           ),
@@ -266,31 +276,39 @@ class _HomePageState extends State<HomePage> {
                                   //   ),
                                   // )
                                   : Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(height: 50),
-                                        Text(
-                                          "Top 100 Albums",
-                                          style: TextStyle(
-                                              fontSize: SizeConfig.font17,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white),
+                                        Visibility(
+                                          visible: true,
+                                          child: Text(
+                                            "Top 100 Albums",
+                                            style: TextStyle(
+                                                fontSize: SizeConfig.font17,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.white),
+                                          ),
                                         ),
                                         ListView.builder(
                                             padding: EdgeInsetsDirectional.zero,
                                             physics: ClampingScrollPhysics(),
                                             shrinkWrap: true,
-                                            itemCount:
-                                                responseDataList.entry.length,
+                                            itemCount: newList.entry.length,
                                             itemBuilder: (context, index) {
                                               return Column(
                                                 children: [
                                                   Padding(
-                                                    padding: EdgeInsets.fromLTRB(
-                                                        SizeConfig.padding16,
-                                                        SizeConfig.padding16,
-                                                        SizeConfig.padding16,
-                                                        SizeConfig.padding12),
+                                                    padding:
+                                                        EdgeInsets.fromLTRB(
+                                                            SizeConfig
+                                                                .padding16,
+                                                            SizeConfig
+                                                                .padding16,
+                                                            SizeConfig
+                                                                .padding16,
+                                                            SizeConfig
+                                                                .padding12),
                                                     // 16, 19, 19, 19),
                                                     child: InkWell(
                                                       onTap: () {
@@ -303,21 +321,29 @@ class _HomePageState extends State<HomePage> {
                                                         // );
                                                       },
                                                       child: MusicCard(
-                                                          name: responseDataList
-                                                              .entry[index].imName.label
-                                                              .toString(),
-                                                          year:
-                                                          responseDataList
-                                                              .entry[index].imReleaseDate.label
-                                                              .toString(),
-                                                          artist: responseDataList
-                                                              .entry[index].imArtist.label
-                                                              .toString(),
-                                                          image: responseDataList
+                                                          name: newList
                                                               .entry[index]
-                                                              .imImage[2].label
+                                                              .imName
+                                                              .label
                                                               .toString(),
-                                                          onTap: () {}
+                                                          year: newList
+                                                              .entry[index]
+                                                              .imReleaseDate
+                                                              .label
+                                                              .toString(),
+                                                          artist: newList
+                                                              .entry[index]
+                                                              .imArtist
+                                                              .label
+                                                              .toString(),
+                                                          image: newList
+                                                              .entry[index]
+                                                              .imImage[2]
+                                                              .label
+                                                              .toString(),
+
+
+
                                                           // Navigator.push(
                                                           //             context,
                                                           //             MaterialPageRoute(
@@ -332,7 +358,7 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                   Divider(
                                                     thickness: 1,
-                                                    color: Color(0xFFf1f2f3),
+                                                    color: Colors.grey,
                                                     height: 1,
                                                   ),
                                                 ],
@@ -343,7 +369,7 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                    );
+                      );
               }),
         ),
       ),

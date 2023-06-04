@@ -4,13 +4,20 @@ import 'package:intl/intl.dart';
 
 import '../../constants/size_config.dart';
 
-class MusicCard extends StatelessWidget {
-  MusicCard({this.image, this.onTap, this.name, this.year, this.artist});
+class MusicCard extends StatefulWidget {
+  MusicCard({this.image, this.name, this.year, this.artist});
   final String image;
-  final VoidCallback onTap;
   final String name;
   final String year;
   final String artist;
+
+
+  @override
+  State<MusicCard> createState() => _MusicCardState();
+}
+
+class _MusicCardState extends State<MusicCard> {
+  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,7 @@ class MusicCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
             ),
-            child: Image.network(image),
+            child: Image.network(widget.image),
           ),
           SizedBox(width: 16),
           Expanded(
@@ -35,7 +42,8 @@ class MusicCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name.toUpperCase(),
+                  widget.name.toUpperCase(),
+                  maxLines: 1,
                   style: TextStyle(
                       height: 1.3,
                       fontSize: SizeConfig.font12,
@@ -44,8 +52,7 @@ class MusicCard extends StatelessWidget {
                 ),
                 SizedBox(height: 2),
                 Text(
-                  DateFormat("yyyy").format(DateTime.parse(year)),
-
+                  DateFormat("yyyy").format(DateTime.parse(widget.year)),
                   style: TextStyle(
                       height: 1.3,
                       fontSize: SizeConfig.font12,
@@ -56,7 +63,7 @@ class MusicCard extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.width - 195,
                   child: Text(
-                    artist,
+                    widget.artist,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -73,11 +80,17 @@ class MusicCard extends StatelessWidget {
           Padding(
             padding: EdgeInsetsDirectional.only(bottom: SizeConfig.padding20),
             child: Container(
-              height:20,
+              height: 20,
               width: 20,
               child: InkWell(
-                onTap: onTap,
-                child: Image.asset('assets/png/button_rating_def.png'),
+                onTap: () {
+                  setState(() {
+                   isFavorite = true;
+                  });
+                },
+                child: isFavorite == true
+                    ? Image.asset('assets/png/button_rating_active.png')
+                    : Image.asset('assets/png/button_rating_def.png'),
               ),
             ),
           ),

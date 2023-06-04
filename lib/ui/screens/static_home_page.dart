@@ -125,29 +125,7 @@ class StaticHomePage extends StatelessWidget {
                 ]))
           ],
         ),
-        PositionedDirectional(
-          bottom: 0,
-          end: 0,
-          start: 0,
-          child: Padding(
-            padding: EdgeInsetsDirectional.only(
-                start: SizeConfig.padding16,
-                end: SizeConfig.padding16,
-                bottom: SizeConfig.padding16,
-                top: SizeConfig.padding8),
-            child: Center(
-              child: Material(
-                borderRadius: BorderRadius.circular(8.0),
-                color: Color(0xFFd6d6d6),
-                child: MaterialButton(
-                  minWidth: MediaQuery.of(context).size.width,
-                  height: 48,
-                  onPressed: () {},
-                ),
-              ),
-            ),
-          ),
-        ),
+
       ],
     );
   }
