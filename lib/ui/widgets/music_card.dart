@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../../constants/size_config.dart';
 
 class MusicCard extends StatefulWidget {
@@ -84,8 +82,11 @@ class _MusicCardState extends State<MusicCard> {
               width: 20,
               child: InkWell(
                 onTap: () {
+                  isFavorite == false?
                   setState(() {
                    isFavorite = true;
+                  }):setState(() {
+                    isFavorite = false;
                   });
                 },
                 child: isFavorite == true

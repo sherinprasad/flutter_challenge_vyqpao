@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_challenge_vyqpao/ui/screens/static_home_page.dart';
-
 import 'package:shimmer/shimmer.dart';
-
 import '../../bloc/home_bloc.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/size_config.dart';
@@ -22,7 +20,6 @@ class _HomePageState extends State<HomePage> {
   Feed newList;
   Feed responseDataList;
   bool showMessage = false;
-  // bool isFavorite = false;
 
   @override
   void initState() {
@@ -38,7 +35,6 @@ class _HomePageState extends State<HomePage> {
     SizeConfig().init(context);
 
     return Scaffold(
-      // backgroundColor: Color(0xFFf8f8f8),
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50.0),
           child: AppBar(
@@ -215,8 +211,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               // SizedBox(height: 28),
-                              showMessage == true &&
-                                  newList != null
+                              showMessage == true && newList != null
                                   ? Container(
                                       height: SizeConfig.screenHeight - 400,
                                       child: Center(
@@ -261,20 +256,6 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                     )
-                                  // Container(
-                                  //   child: Padding(
-                                  //     padding: EdgeInsetsDirectional.only(
-                                  //         top: 20.0),
-                                  //     child: Text(
-                                  //
-                                  //      "No results found",
-                                  //       style: TextStyle(
-                                  //           fontSize: SizeConfig.font13,
-                                  //           color: appColors.veryLightPink,
-                                  //           fontWeight: FontWeight.w400),
-                                  //     ),
-                                  //   ),
-                                  // )
                                   : Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -311,49 +292,29 @@ class _HomePageState extends State<HomePage> {
                                                                 .padding12),
                                                     // 16, 19, 19, 19),
                                                     child: InkWell(
-                                                      onTap: () {
-                                                        // Navigator.push(
-                                                        //   context,
-                                                        //   MaterialPageRoute(
-                                                        //     builder: (_) =>
-                                                        //
-                                                        //   ),
-                                                        // );
-                                                      },
+                                                      onTap: () {},
                                                       child: MusicCard(
-                                                          name: newList
-                                                              .entry[index]
-                                                              .imName
-                                                              .label
-                                                              .toString(),
-                                                          year: newList
-                                                              .entry[index]
-                                                              .imReleaseDate
-                                                              .label
-                                                              .toString(),
-                                                          artist: newList
-                                                              .entry[index]
-                                                              .imArtist
-                                                              .label
-                                                              .toString(),
-                                                          image: newList
-                                                              .entry[index]
-                                                              .imImage[2]
-                                                              .label
-                                                              .toString(),
-
-
-
-                                                          // Navigator.push(
-                                                          //             context,
-                                                          //             MaterialPageRoute(
-                                                          //               builder: (_) =>
-                                                          //                   TopServiceBooking(
-                                                          //
-                                                          //                   ),
-                                                          //             ),
-                                                          //           ),
-                                                          ),
+                                                        name: newList
+                                                            .entry[index]
+                                                            .imName
+                                                            .label
+                                                            .toString(),
+                                                        year: newList
+                                                            .entry[index]
+                                                            .imReleaseDate
+                                                            .label
+                                                            .toString(),
+                                                        artist: newList
+                                                            .entry[index]
+                                                            .imArtist
+                                                            .label
+                                                            .toString(),
+                                                        image: newList
+                                                            .entry[index]
+                                                            .imImage[2]
+                                                            .label
+                                                            .toString(),
+                                                      ),
                                                     ),
                                                   ),
                                                   Divider(
